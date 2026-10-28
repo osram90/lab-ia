@@ -1,0 +1,21 @@
+{
+  // laboratorio.ia en Cloudflare: Worker + interfaz (web/) + D1 + KV + Workers AI.
+  // Sin IDs: al desplegar, wrangler crea la base de datos D1 y el KV en tu cuenta.
+  "$schema": "https://unpkg.com/wrangler@4.145.0/config-schema.json",
+  "name": "lab-ia",
+  "main": "nube/src/index.js",
+  "compatibility_date": "2026-10-01",
+  "build": { "command": "node nube/empaquetar-skills.mjs" },
+  "assets": { "directory": "./web", "binding": "ASSETS" },
+  "ai": { "binding": "AI" },
+  "d1_databases": [{ "binding": "DB", "database_name": "lab-ia","database_id": "16363f52-925f-4c73-be7a-627b5f00b23e" }],
+  "kv_namespaces": [{ "binding": "MEDIA","id": "91c1ce15fa494fa5b0338d2712082b6b" }],
+  "vars": {
+    "REPO": "https://github.com/ReserchLab/lab-ia"
+  },
+  // Entrenamiento automático: avanza un paso cada minuto (destilar, Kaggle, subir el modelo).
+  "triggers": { "crons": ["* * * * *"] },
+  // El script de entrenamiento de Kaggle se importa como texto.
+  "rules": [{ "type": "Text", "globs": ["**/*.py"], "fallthrough": true }],
+  "observability": { "enabled": true }
+}
